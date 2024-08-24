@@ -113,14 +113,55 @@ def get_notes(request):
     return JsonResponse(data, safe=False, status=200)
 
 
+@csrf_exempt
 @login_required
 def get_tag(request, tag_id):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    try:
+        tag = Tag.objects.get(pk=tag_id)
+    except Tag.DoesNotExist:
+        return JsonResponse({"error": "Tag does not exist"}, status=404)
+    
+    data = [] # first entry gives info on the tag, data[:1] gives all note ids that are associated with this tag
+    data.append({
+        "id": tag.id,
+        "name": tag.name
+    })
+
+    for note in tag.notes.all():
+        data.append({
+            "note_id": note.id
+        })
+
+    return JsonResponse(data, safe=False, status=200)
 
 
+@csrf_exempt
 @login_required
 def get_note(request, note_id):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    try:
+        note = Note.objects.get(pk=note_id)
+    except Note().DoesNotExist:
+        return JsonResponse({"error": "Note does not exist"}, status=404)
+
+    data = [] # same format as get_tag()
+    data.append({
+        "id": note.id,
+        "name": note.name,
+        "content": note.content
+    })
+
+    for tag in note.tags.all():
+        data.append({
+            "tag_id": tag.id
+        })
+
+    return JsonResponse(data, safe=False, status=200)      
 
 
 @login_required
@@ -133,14 +174,34 @@ def update_note(request, note_id):
     pass
 
 
+@csrf_exempt
 @login_required
 def delete_tag(request, tag_id):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    try:
+        tag = Tag.objects.get(pk=tag_id)
+    except Tag.DoesNotExist:
+        return JsonResponse({"error": "Tag does not exist"}, status=404)
+
+    tag.delete()
+    return JsonResponse({"message": "Tag deleted"}, status=200)
 
 
+@csrf_exempt
 @login_required
 def delete_note(request, note_id):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    try:
+        note = Note.objects.get(pk=note_id)
+    except Note.DoesNotExist:
+        return JsonResponse({"error": "Note does not exist"}, status=404)
+
+    note.delete()
+    return JsonResponse({"message": "Note deleted"}, status=200)
 
 
 def login_view(request):
