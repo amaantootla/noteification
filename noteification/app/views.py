@@ -12,6 +12,7 @@ from .models import *
 
 # Create your views here.
 
+
 @login_required
 def index(request):
     return render(request, 'app/index.html')
@@ -27,6 +28,7 @@ def create_tag(request):
         return JsonResponse({"error": "body is empty"}, status=400)
     
     data = json.loads(request.body)
+
     if data.get("name") is not None:
         name = data["name"]
     else:
@@ -45,20 +47,70 @@ def create_tag(request):
     
     return JsonResponse({"message": f"Tag \"{name}\" created"}, status=201)
 
-
+@csrf_exempt
 @login_required
 def create_note(request):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    if not request.body:
+        return JsonResponse({"error": "body is empty"}, status=400)
+    
+    data = json.loads(request.body)
+
+    if data.get("name") is not None:
+        name = data["name"]
+    else:
+         return JsonResponse({"error": "name is missing"}, status=400)
+    
+    if data.get("content") is not None:
+        content = data["content"]
+    else:
+        return JsonResponse({"error": "content is missing"}, status=400)
+    
+    # it is fine if content is empty, an empty note is valid
+    if not name:
+        return JsonResponse({"error": "name is empty"}, status=400)
+    
+    if len(name) > 64:
+        return JsonResponse({"error": "name exceeds 64 character limit"}, status=400)
+
+    try:
+        Note(name=name, content=content, owner=request.user).save()
+    except IntegrityError:
+        return JsonResponse({"error": f"Note could not be made"}, status=400)
+    
+    return JsonResponse({"message": f"Note created"}, status=201)
 
 
+@csrf_exempt
 @login_required
 def get_tags(request):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    data = {}
+    for tag in Tag.objects.filter(owner=request.user):
+        data[tag.id] = tag.name
+
+    return JsonResponse(data, status=200)
 
 
+@csrf_exempt
 @login_required
 def get_notes(request):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    data = [] # list of dicts
+    for note in Note.objects.filter(owner=request.user):
+        data.append({
+            "id": note.id,
+            "name": note.name,
+            "content": note.content
+        })
+
+    return JsonResponse(data, safe=False, status=200)
 
 
 @login_required
