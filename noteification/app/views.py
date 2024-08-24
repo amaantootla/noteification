@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+import json
 
 from .models import *
 
@@ -16,9 +17,33 @@ def index(request):
     return render(request, 'app/index.html')
 
 
+@csrf_exempt
 @login_required
 def create_tag(request):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+    
+    if not request.body:
+        return JsonResponse({"error": "body is empty"}, status=400)
+    
+    data = json.loads(request.body)
+    if data.get("name") is not None:
+        name = data["name"]
+    else:
+         return JsonResponse({"error": "name is missing"}, status=400)
+    
+    if not name:
+        return JsonResponse({"error": "name is empty"}, status=400)
+    
+    if len(name) > 64:
+        return JsonResponse({"error": "name exceeds 64 character limit"}, status=400)
+
+    try:
+        Tag(name=name, owner=request.user).save()
+    except IntegrityError:
+        return JsonResponse({"error": f"Tag named \"{name}\" already exists"}, status=400)
+    
+    return JsonResponse({"message": f"Tag \"{name}\" created"}, status=201)
 
 
 @login_required

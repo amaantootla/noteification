@@ -8,9 +8,8 @@ class User(AbstractUser):
 
 
 class Tag(models.Model):
-    # TODO ensure no Tag of a duplicate name may be created.
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
 
 
 class Note(models.Model):
