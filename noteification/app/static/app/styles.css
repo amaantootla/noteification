@@ -57,3 +57,7 @@ a:hover {
 .d-flex.justify-content-center.align-items-center.vh-100 {
     background-color: #f8f9fa; /* Match background to body */
 }
+
+textarea {
+    border: none;
+}

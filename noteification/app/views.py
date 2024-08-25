@@ -9,11 +9,10 @@ from django.http import JsonResponse
 import json
 
 from .models import *
+TAG_NAME_LENGTH = 16
 
 # Create your views here.
 
-# TODO update status codes to be proper
-# TODO use POST/PUT in the right context
 
 def add_tag(tag_id, note, user):
     try:
@@ -26,6 +25,7 @@ def add_tag(tag_id, note, user):
     
     note.tags.add(tag)
     return None
+
 
 @login_required
 def index(request):
@@ -51,7 +51,7 @@ def create_tag(request):
     if not name:
         return JsonResponse({"error": "name is empty"}, status=400)
     
-    if len(name) > 64:
+    if len(name) > TAG_NAME_LENGTH:
         return JsonResponse({"error": "name exceeds 64 character limit"}, status=400)
 
     try:
@@ -60,6 +60,7 @@ def create_tag(request):
         return JsonResponse({"error": f"Tag named \"{name}\" already exists"}, status=400)
     
     return JsonResponse({"message": f"Tag \"{name}\" created"}, status=201)
+
 
 @csrf_exempt
 @login_required
@@ -71,26 +72,14 @@ def create_note(request):
         return JsonResponse({"error": "body is empty"}, status=400)
     
     data = json.loads(request.body)
-
-    if data.get("name") is not None:
-        name = data["name"]
-    else:
-         return JsonResponse({"error": "name is missing"}, status=400)
     
     if data.get("content") is not None:
         content = data["content"]
     else:
         return JsonResponse({"error": "content is missing"}, status=400)
-    
-    # it is fine if content is empty, an empty note is valid
-    if not name:
-        return JsonResponse({"error": "name is empty"}, status=400)
-    
-    if len(name) > 64:
-        return JsonResponse({"error": "name exceeds 64 character limit"}, status=400)
 
     try:
-        Note(name=name, content=content, owner=request.user).save()
+        Note(content=content, owner=request.user).save()
     except IntegrityError:
         return JsonResponse({"error": f"Note could not be made"}, status=400)
     
@@ -120,7 +109,6 @@ def get_notes(request):
     for note in Note.objects.filter(owner=request.user):
         data.append({
             "id": note.id,
-            "name": note.name,
             "content": note.content
         })
 
@@ -172,7 +160,6 @@ def get_note(request, note_id):
     data = [] # same format as get_tag()
     data.append({
         "id": note.id,
-        "name": note.name,
         "content": note.content
     })
 
@@ -182,6 +169,7 @@ def get_note(request, note_id):
         })
 
     return JsonResponse(data, safe=False, status=200)      
+
 
 @csrf_exempt
 @login_required
@@ -208,7 +196,7 @@ def update_tag(request, tag_id):
         if not name:
             return JsonResponse({"error": "name is empty"}, status=400)
         
-        if len(name) > 64:
+        if len(name) > TAG_NAME_LENGTH:
             return JsonResponse({"error": "name exceeds 64 character limit"}, status=400)
 
         tag.name = name
@@ -235,18 +223,6 @@ def update_note(request, note_id):
         return JsonResponse({"error": "No permission"}, status=404)
     
     data = json.loads(request.body)
-
-    if data.get("name") is not None:
-        name = data["name"]
-
-        if not name:
-            return JsonResponse({"error": "name is empty"}, status=400)
-        
-        if len(name) > 64:
-            return JsonResponse({"error": "name exceeds 64 character limit"}, status=400)
-
-        note.name = name
-        note.save()
 
     if data.get("content") is not None:
         content = data["content"]
