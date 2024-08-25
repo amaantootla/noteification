@@ -12,6 +12,20 @@ from .models import *
 
 # Create your views here.
 
+# TODO update status codes to be proper
+# TODO use POST/PUT in the right context
+
+def add_tag(tag_id, note, user):
+    try:
+        tag = Tag.objects.get(tag_id)
+    except IntegrityError:
+        return "Tag does not exist"
+
+    if tag.owner != user:
+        return "No permission"
+    
+    note.tags.add(tag)
+    return None
 
 @login_required
 def index(request):
@@ -124,6 +138,9 @@ def get_tag(request, tag_id):
     except Tag.DoesNotExist:
         return JsonResponse({"error": "Tag does not exist"}, status=404)
     
+    if tag.owner != request.user:
+        return JsonResponse({"error": "No permission"}, status=404)
+    
     data = [] # first entry gives info on the tag, data[:1] gives all note ids that are associated with this tag
     data.append({
         "id": tag.id,
@@ -149,6 +166,9 @@ def get_note(request, note_id):
     except Note().DoesNotExist:
         return JsonResponse({"error": "Note does not exist"}, status=404)
 
+    if note.owner != request.user:
+        return JsonResponse({"error": "No permission"}, status=404)
+    
     data = [] # same format as get_tag()
     data.append({
         "id": note.id,
@@ -163,16 +183,89 @@ def get_note(request, note_id):
 
     return JsonResponse(data, safe=False, status=200)      
 
-
+@csrf_exempt
 @login_required
 def update_tag(request, tag_id):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+    if not request.body:
+        return JsonResponse({"error": "body is empty"}, status=400)
+    
+    try:
+        tag = Tag.objects.get(pk=tag_id)
+    except Tag.DoesNotExist:
+        return JsonResponse({"error": "Tag does not exist"}, status=404)
+
+    if tag.owner != request.user:
+        return JsonResponse({"error": "No permission"}, status=404)   
+     
+    data = json.loads(request.body)
+
+    if data.get("name") is not None:
+        name = data["name"]
+
+        if not name:
+            return JsonResponse({"error": "name is empty"}, status=400)
+        
+        if len(name) > 64:
+            return JsonResponse({"error": "name exceeds 64 character limit"}, status=400)
+
+        tag.name = name
+        tag.save()
+
+    return JsonResponse({"message": "tag updated", "id": tag.id, "name": tag.name}, status=200)
 
 
+@csrf_exempt
 @login_required
 def update_note(request, note_id):
-    pass
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required."}, status=400)
 
+    if not request.body:
+        return JsonResponse({"error": "body is empty"}, status=400)
+    
+    try:
+        note = Note.objects.get(pk=note_id)
+    except Tag.DoesNotExist:
+        return JsonResponse({"error": "Tag does not exist"}, status=404) 
+    
+    if note.owner != request.user:
+        return JsonResponse({"error": "No permission"}, status=404)
+    
+    data = json.loads(request.body)
+
+    if data.get("name") is not None:
+        name = data["name"]
+
+        if not name:
+            return JsonResponse({"error": "name is empty"}, status=400)
+        
+        if len(name) > 64:
+            return JsonResponse({"error": "name exceeds 64 character limit"}, status=400)
+
+        note.name = name
+        note.save()
+
+    if data.get("content") is not None:
+        content = data["content"]
+
+        note.name = content
+        note.save()
+
+    if data.get("tags") is not None:
+        tags = data["tags"]
+        note.tags.clear() # remove all tags first, the UI should preselect tags that are already applied
+        for tag in tags:
+            result = add_tag(tag, note)
+            if result is not None:
+                return JsonResponse({"error": f"{result}"}, status=400)
+
+        note.save()
+
+    return JsonResponse({"message": "note updated", "id": note.id}, status=200)
+    
 
 @csrf_exempt
 @login_required
@@ -184,6 +277,9 @@ def delete_tag(request, tag_id):
         tag = Tag.objects.get(pk=tag_id)
     except Tag.DoesNotExist:
         return JsonResponse({"error": "Tag does not exist"}, status=404)
+    
+    if tag.owner != request.user:
+        return JsonResponse({"error": "No permission"}, status=404)
 
     tag.delete()
     return JsonResponse({"message": "Tag deleted"}, status=200)
@@ -199,6 +295,9 @@ def delete_note(request, note_id):
         note = Note.objects.get(pk=note_id)
     except Note.DoesNotExist:
         return JsonResponse({"error": "Note does not exist"}, status=404)
+    
+    if note.owner != request.user:
+        return JsonResponse({"error": "No permission"}, status=404)
 
     note.delete()
     return JsonResponse({"message": "Note deleted"}, status=200)
