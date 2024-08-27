@@ -1,19 +1,13 @@
-markdown support (parser)
-sleek UI
-simple CRUD
-AI integration for smart folders? 
+# TODO ai integration for smart tag creation
+# TODO tests.py
 
 views.py
-# TODO update status codes to be proper
-# TODO use POST/PUT in the right context
-# TODO checking existance then ownership is leaking data?
-
-no more name per note, only content, name is a cheap solution
+# TODO use proper HTTP status code
+# TODO use proper HTTP method (POST/PUT)
+# TODO use deltas
+# TODO optimize format of get_notes()
 
 main.js
-# TODO each note entry should have a delete button and a config button
-config should just honestly be choosing what tags to be put into (just a HTML selection)
-autosvae by deafault
-
-tests.py
-all endpoints on the serverside (with security in mind)
+# TODO add note, add tag, add tags to note, add notes to tags
+# TODO delete note, delete tag
+# TODO change tag name, new note content (autosave)
