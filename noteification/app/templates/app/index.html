@@ -1,9 +1,25 @@
 {% extends "app/layout.html" %}
+{% load static %}
 
 {% block body %}
-<div style="display: none">{{ csrf_token }}</div>
-
+<div style="display: none" id="csrf">{{ csrf_token }}</div>
+<div style="display: none" id="selected_entry" data-type=""></div>
 <!-- sidebar, "All Notes" "Tags" -->
 <!-- clicking on a tag shows only notes under that tag -->
- <textarea></textarea>
+<div class="row">
+    <div class="column" id="left_pane">
+        <button id="all_notes">All Notes</button>
+        <button id="all_tags">Tags</button>
+        <a href="{% url 'logout' %}">Log out</a>
+        <h2 id="page_title"></h2>
+        <ul id="entry_list"></ul>
+    </div>
+    <div class="column" id="right_pane">
+        <textarea id="editor"></textarea>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'app/main.js' %}"></script>
 {% endblock %}

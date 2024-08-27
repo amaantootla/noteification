@@ -92,11 +92,14 @@ def get_tags(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
     
-    data = {}
+    data = [] # list of dicts
     for tag in Tag.objects.filter(owner=request.user):
-        data[tag.id] = tag.name
+        data.append({
+            "id": tag.id,
+            "name": tag.name
+        })
 
-    return JsonResponse(data, status=200)
+    return JsonResponse(data, safe=False, status=200)
 
 
 @csrf_exempt
@@ -105,11 +108,12 @@ def get_notes(request):
     if request.method != "POST":
         return JsonResponse({"error": "POST request required."}, status=400)
     
-    data = [] # list of dicts
+    data = [] 
     for note in Note.objects.filter(owner=request.user):
         data.append({
             "id": note.id,
-            "content": note.content
+            "content": note.content,
+            "tags": [tag.id for tag in note.tags.all()]
         })
 
     return JsonResponse(data, safe=False, status=200)
