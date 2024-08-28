@@ -6,7 +6,6 @@ views.py
 
 main.js
 # TODO delete note, delete tag
+# TODO add notes to tags
 
-# TODO add max char limit for one line preview
-# TODO add animation when a note is edited so it bubbles up to the top
-# TODO better UI for tag management (i think just from All notes is cool tho?)
+TODO styling, i'm just not great at what style should be ... plus i want to avoid making a copy-cat site

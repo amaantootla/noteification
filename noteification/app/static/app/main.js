@@ -23,6 +23,7 @@ function add_new_note() {
     const add_button = document.createElement('button');
     add_button.id = 'add_note';
     add_button.innerHTML = '+';
+    add_button.className = 'btn btn-primary';
     document.querySelector('#page_title').append(add_button);
 
     add_button.addEventListener('click', () => {
@@ -45,6 +46,7 @@ function add_new_tag() {
     const add_button = document.createElement('button');
     add_button.id = 'add_tag';
     add_button.innerHTML = '+';
+    add_button.className = 'btn btn-primary';
     document.querySelector('#page_title').append(add_button);
 
     add_button.onclick = () => {
@@ -126,12 +128,12 @@ function load_tags() {
             tag = document.createElement('span');
             tag.className = 'tag-entry-text';
             tag.dataset.id = element.id;
-            tag.innerHTML = element.name;
+            tag.innerHTML = element.name + '&#9';
             container.append(tag);
 
             notes_button = document.createElement('button');
             notes_button.innerHTML = 'Notes';
-            notes_button.className = 'tag-entry-notes';
+            notes_button.className = 'tag-entry-notes btn btn-primary';
             container.append(notes_button);
             
             document.querySelector('#entry_list').append(container);
@@ -145,9 +147,27 @@ function load_tags() {
                 document.querySelector('#page_title').innerHTML = `#${tag.target.innerHTML}`;
 
                 const rename = document.createElement('button');
+                rename.className = 'btn btn-primary';
                 rename.id = 'rename_tag';
                 rename.innerHTML = 'Rename';
                 document.querySelector('#page_title').append(rename);
+
+                rename.onclick = () => {
+                    document.querySelector("#tag_adder").style.display = 'block';
+                    document.querySelector("#tag_adder_submit").onclick = () => {
+                        fetch(`/update_tag/${tag.target.dataset.id}`, {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                name: document.querySelector('#small_input').value
+                            }) 
+                        })
+                        .then(() => {
+                            document.querySelector('#small_input').value = '';
+                            document.querySelector("#tag_adder").style.display = 'none';
+                            document.querySelector('#all_tags').click();
+                        })
+                    }
+                }
             })
         })
 

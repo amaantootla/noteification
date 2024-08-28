@@ -4,15 +4,15 @@
 {% block body %}
 <div style="display: none" id="csrf">{{ csrf_token }}</div>
 <div style="display: none" id="selected_entry" data-type=""></div>
-<div class="row">
+<div class="row" style="padding: 1%">
     <div class="column" id="left_pane">
-        <button id="all_notes">Notes</button>
-        <button id="all_tags">Tags</button>
+        <button class='btn btn-primary' id="all_notes">Notes</button>
+        <button class='btn btn-primary' id="all_tags">Tags</button>
         <a href="{% url 'logout' %}">Log out</a>
         <h2 id="page_title"></h2>
         <div id="tag_adder" style="display: none">
             <textarea id="small_input" style="resize: none;" rows="1" cols="16"></textarea>
-            <button id="tag_adder_submit">Add</button>
+            <button class='btn btn-primary' id="tag_adder_submit">Add</button>
         </div>
         
         <ul id="entry_list"></ul>
