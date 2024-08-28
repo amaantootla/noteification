@@ -2,33 +2,8 @@
 {% load static %}
 
 {% block body %}
-<div style="display: none" id="csrf">{{ csrf_token }}</div>
-<div style="display: none" id="selected_entry" data-type=""></div>
-<div class="row" style="padding: 1%">
-    <div class="column" id="left_pane">
-        <button class='btn btn-primary' id="all_notes">Notes</button>
-        <button class='btn btn-primary' id="all_tags">Tags</button>
-        <a href="{% url 'logout' %}">Log out</a>
-        <h2 id="page_title"></h2>
-        <div id="tag_adder" style="display: none">
-            <textarea id="small_input" style="resize: none;" rows="1" cols="16"></textarea>
-            <button class='btn btn-primary' id="tag_adder_submit">Add</button>
-        </div>
-        
-        <ul id="entry_list"></ul>
-    </div>
-    <div class="column" id="right_pane">
-        <textarea id="editor" style="display: block;"></textarea>
-        <div class="tag_selector" style="display: none;">
-            <form>
-                <select>
-                </select>
-            </form>
-        </div>
-    </div>
-  </div>
+<div>Hello World!</div>
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'app/main.js' %}"></script>
 {% endblock %}
