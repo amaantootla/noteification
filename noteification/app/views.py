@@ -79,11 +79,12 @@ def create_note(request):
         return JsonResponse({"error": "content is missing"}, status=400)
 
     try:
-        Note(content=content, owner=request.user).save()
+        note = Note(content=content, owner=request.user)
+        note.save()
     except IntegrityError:
         return JsonResponse({"error": f"Note could not be made"}, status=400)
     
-    return JsonResponse({"message": f"Note created"}, status=201)
+    return JsonResponse({"id": note.id}, status=201)
 
 
 @csrf_exempt
@@ -231,7 +232,7 @@ def update_note(request, note_id):
     if data.get("content") is not None:
         content = data["content"]
 
-        note.name = content
+        note.content = content
         note.save()
 
     if data.get("tags") is not None:

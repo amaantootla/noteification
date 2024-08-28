@@ -4,23 +4,27 @@
 {% block body %}
 <div style="display: none" id="csrf">{{ csrf_token }}</div>
 <div style="display: none" id="selected_entry" data-type=""></div>
-<!-- sidebar, "All Notes" "Tags" -->
-<!-- clicking on a tag shows only notes under that tag -->
 <div class="row">
     <div class="column" id="left_pane">
-        <button id="all_notes">All Notes</button>
+        <button id="all_notes">Notes</button>
         <button id="all_tags">Tags</button>
         <a href="{% url 'logout' %}">Log out</a>
         <h2 id="page_title"></h2>
+        <div id="tag_adder" style="display: none">
+            <textarea id="small_input" style="resize: none;" rows="1" cols="16"></textarea>
+            <button id="tag_adder_submit">Add</button>
+        </div>
+        
         <ul id="entry_list"></ul>
-        <div class="card">
-            <div class="card-body">
-              This is some text within a card body.
-            </div>
-          </div>
     </div>
     <div class="column" id="right_pane">
-        <textarea id="editor"></textarea>
+        <textarea id="editor" style="display: block;"></textarea>
+        <div class="tag_selector" style="display: none;">
+            <form>
+                <select>
+                </select>
+            </form>
+        </div>
     </div>
   </div>
 {% endblock %}

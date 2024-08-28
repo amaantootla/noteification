@@ -50,7 +50,7 @@ a:hover {
     background-color: #f8f9fa;
 }
 
-textarea {
+#editor {
     border: none;
     outline: none;
     resize: none;
