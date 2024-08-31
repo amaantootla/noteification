@@ -1,5 +1,6 @@
 {% extends 'app/layout.html' %}
 
 {% block body %}
-<div>Hello World!</div>
+<div id="csrf_token" style="display: none;">{{ csrf_token }}</div>
+<h1>Hello World!</h1>
 {% endblock %}
