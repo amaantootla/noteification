@@ -11,6 +11,7 @@
         {% endblock %}
     </head>
     <body>
+        <div id="csrf_token" style="display: none;">{{ csrf_token }}</div>
         <div class="body">
             {% block body %}
             {% endblock %}
