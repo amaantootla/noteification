@@ -10,9 +10,20 @@ from .models import *
 # Create your views here.
 
 
+def all_notes(user):
+    return Note.objects.filter(owner=user).order_by('-last_updated')
+
+
+def all_folders(user):
+    return Folder.objects.filter(owner=user)
+
+
 @login_required(login_url='/login')
 def index(request):
-    return render(request, "app/index.html")
+    return render(request, "app/index.html", {
+        "notes": all_notes(request.user),
+        "folders": all_folders(request.user)
+    })
 
 
 def login_view(request):

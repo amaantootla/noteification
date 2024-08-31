@@ -20,6 +20,14 @@
     </div>
 
     <div id="folders-content" class="content-area hidden">
+        {% for folder in folders %}
+        <div class="folder card mb-3 position-relative">
+            <div class="card-body">
+                <a href="#" class="card-text">{{ folder.name }}</a>
+                <a href="#" class="btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px;">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

@@ -94,7 +94,7 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Increase the shadow on hover */
 }
 
-a {
+.note a {
     /* https://stackoverflow.com/a/8919740 */
     color: inherit; /* blue colors for links too */
     text-decoration: inherit; /* no underline */
