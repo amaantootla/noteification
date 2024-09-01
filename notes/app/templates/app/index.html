@@ -5,8 +5,9 @@
 <div class="container">
     <div class="tabs">
         <button id="notes-tab" class="tab-button active btn btn-secondary">Notes</button>
-        <button id="folders-tab" class="tab-button btn btn-secondary">Folders</button>
+        <button id="audio-tab" class="tab-button btn btn-secondary">🎤</button>
     </div>
+    <button id="new_note" class="btn btn-primary">+</button>
 
     <div id="notes-content" class="content-area hidden">
         {% for note in notes %}
@@ -19,15 +20,7 @@
         {% endfor %}
     </div>
 
-    <div id="folders-content" class="content-area hidden">
-        {% for folder in folders %}
-        <div class="folder card mb-3 position-relative">
-            <div class="card-body">
-                <a href="#" class="card-text">{{ folder.name }}</a>
-                <a href="#" class="btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px;">Delete</a>
-            </div>
-        </div>
-        {% endfor %}
+    <div id="audio-content" class="content-area hidden">
     </div>
 </div>
 {% endblock %}
