@@ -20,7 +20,6 @@ def all_folders(user):
 
 @login_required(login_url='/login')
 def delete_note(request, note_id, parent):
-
     # https://docs.djangoproject.com/en/5.1/topics/http/shortcuts/#get-object-or-404
     note = get_object_or_404(Note, pk=note_id)
     
@@ -28,12 +27,17 @@ def delete_note(request, note_id, parent):
         return HttpResponseForbidden("Ownership Error.")
 
     note.delete()
+    return HttpResponseRedirect(reverse(parent)) # janky solution
 
-    return HttpResponseRedirect(reverse(parent)) # janky solution, not that a page that does not exist can even be reached
 
+def delete_folder(request, folder_id, parent):
+    folder = get_object_or_404(Folder, pk=folder_id)
 
-def delete_folder(user, folder_id):
-    pass
+    if request.user != folder.owner:
+        return HttpResponseForbidden("Ownership Error.")
+    
+    folder.delete()
+    return HttpResponseRedirect(reverse(parent))
 
 
 @login_required(login_url='/login')
