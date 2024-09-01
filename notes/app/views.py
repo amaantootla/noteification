@@ -14,8 +14,27 @@ def all_notes(user):
     return Note.objects.filter(owner=user).order_by('-last_updated')
 
 
-def all_folders(user):
-    return Folder.objects.filter(owner=user)
+@login_required(login_url='/login')
+def createdit_note(request, note_id, parent):
+    if note_id != 0:
+        note = get_object_or_404(Note, pk=note_id)
+
+        if note.owner != request.user:
+            return HttpResponseForbidden("Ownership Error.")
+    else:
+        note = Note(owner=request.user, body='')
+        note.save()
+        note_id = note.id
+
+    if request.method == "POST":
+        note.body = request.POST["body"]
+        note.save()
+        return HttpResponseRedirect(reverse(parent))
+    
+    return render(request, "app/edit.html", {
+        "id": note_id,
+        "body": note.body
+    })
 
 
 @login_required(login_url='/login')
@@ -30,21 +49,10 @@ def delete_note(request, note_id, parent):
     return HttpResponseRedirect(reverse(parent)) # janky solution
 
 
-def delete_folder(request, folder_id, parent):
-    folder = get_object_or_404(Folder, pk=folder_id)
-
-    if request.user != folder.owner:
-        return HttpResponseForbidden("Ownership Error.")
-    
-    folder.delete()
-    return HttpResponseRedirect(reverse(parent))
-
-
 @login_required(login_url='/login')
 def index(request):
     return render(request, "app/index.html", {
         "notes": all_notes(request.user),
-        "folders": all_folders(request.user)
     })
 
 

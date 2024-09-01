@@ -1,0 +1,15 @@
+{% extends 'app/layout.html' %}
+{% load static %}
+
+{% block body %}
+<div class="zen-editor-container">
+    <form action="{% url 'createdit_note' id 'index' %}" method="POST">
+        {% csrf_token %}
+        <textarea name="body" class="zen-textarea" placeholder="...">{{ body }}</textarea>
+        <button type="submit" class="zen-save-button">Save</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

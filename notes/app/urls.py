@@ -9,12 +9,6 @@ urlpatterns = [
     path('login', views.login_view, name='login'),
     path('logout', views.logout_view, name='logout'),
 
+    path('createdit_note/<int:note_id>/<str:parent>', views.createdit_note, name='createdit_note'),
     path('delete_note/<int:note_id>/<str:parent>', views.delete_note, name='delete_note'),
-    path('delete_folder/<int:folder_id>/<str:parent>', views.delete_folder, name='delete_folder'),
-
-    # TODO update note
-    # TODO update folder
-
-    # TODO create note
-    # TODO create folder
 ]
