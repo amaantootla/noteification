@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.db import IntegrityError
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -16,6 +16,24 @@ def all_notes(user):
 
 def all_folders(user):
     return Folder.objects.filter(owner=user)
+
+
+@login_required(login_url='/login')
+def delete_note(request, note_id, parent):
+
+    # https://docs.djangoproject.com/en/5.1/topics/http/shortcuts/#get-object-or-404
+    note = get_object_or_404(Note, pk=note_id)
+    
+    if request.user != note.owner:
+        return HttpResponseForbidden("Ownership Error.")
+
+    note.delete()
+
+    return HttpResponseRedirect(reverse(parent)) # janky solution, not that a page that does not exist can even be reached
+
+
+def delete_folder(user, folder_id):
+    pass
 
 
 @login_required(login_url='/login')
