@@ -1,19 +1,14 @@
 # Noteification
 
 ## Overview
-**Noteification** is a dynamic note-taking web application that allows users to create, edit, and manage notes seamlessly. The application is built using Django for the backend and JavaScript for interactivity on the frontend. It is fully mobile-responsive, ensuring an optimal user experience across different devices.
-
-## Distinctiveness and Complexity
-This project is different from anything we've built before. It's not a social media app or an e-commerce site, and it's also unique compared to projects from previous years.
-
-As for complexity, I used Django with multiple models (which I explain below) and included a JavaScript file for the frontend. Plus, the whole web application is responsive, so it works well on both mobile phones and computers.
+**Noteification** is a dynamic note-taking web application that allows users to create, edit, and manage notes seamlessly. The application is built using Django for the backend and JavaScript for interactivity on the frontend. It is fully mobile-responsive.
 
 ## Features
 - User registration and login functionality.
 - Note creation, editing, and deletion.
 - Tabbed interface to toggle between notes and fun facts.
 - Fetching and displaying random fun facts from an external API.
-- Mobile responsiveness for a seamless experience on all devices.
+- Mobile responsiveness.
 
 ## Technologies Used
 - **Python (Django)**: Backend framework handling core functionalities.
