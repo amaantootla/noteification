@@ -41,13 +41,13 @@
 .tabs {
     display: flex;
     justify-content: space-between;
-    width: 50%; /* Adjust this percentage based on how much space you want between buttons */
+    width: 50%; 
     margin: 0 auto;
     position: sticky;
     top: 0;
-    background-color: white; /* Ensure background covers content behind the tabs */
-    z-index: 1000; /* Ensure tabs stay above other content */
-    padding: 10px 0; /* Add some padding for better appearance */
+    background-color: white;
+    z-index: 1000;
+    padding: 10px 0;
 }
 
 .tab-button {

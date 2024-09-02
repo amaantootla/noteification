@@ -1,4 +1,4 @@
-# Noteification - Final Project for HarvardX CS50W: Web Programming with Python and JavaScript
+# Noteification
 
 ## Overview
 **Noteification** is a dynamic note-taking web application that allows users to create, edit, and manage notes seamlessly. The application is built using Django for the backend and JavaScript for interactivity on the frontend. It is fully mobile-responsive, ensuring an optimal user experience across different devices.
@@ -63,3 +63,6 @@ As for complexity, I used Django with multiple models (which I explain below) an
 ## Additional Information
 - **API Integration**: The application fetches random fun facts from [uselessfacts.jsph.pl](https://uselessfacts.jsph.pl/) and displays them in the bonus tab.
 - **Responsive Design**: The application is mobile responsive.
+
+## Video
+[YouTube](https://www.youtube.com/watch?v=Z5ieXqf6r50)
