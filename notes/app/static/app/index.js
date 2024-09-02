@@ -1,48 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const notes_tab = document.getElementById('notes-tab');
-    const audio_tab = document.getElementById('audio-tab');
+    const bonus_tab = document.getElementById('bonus-tab');
     const notes_content = document.getElementById('notes-content');
-    const audio_content = document.getElementById('audio-content');
+    const bonus_content = document.getElementById('bonus-content');
 
     // toggle
     notes_tab.addEventListener('click', () => {
         notes_tab.classList.remove('btn-secondary');
         notes_tab.classList.add('btn-success');
 
-        if (audio_tab.classList.contains('btn-success')) {
-            audio_tab.classList.remove('btn-success');
-            audio_tab.classList.add('btn-secondary');
+        if (bonus_tab.classList.contains('btn-success')) {
+            bonus_tab.classList.remove('btn-success');
+            bonus_tab.classList.add('btn-secondary');
         }
 
         notes_content.classList.remove('hidden');
-        audio_content.classList.add('hidden');
+        bonus_content.classList.add('hidden');
 
         notes_tab.classList.add('active');
-        audio_tab.classList.remove('active');
+        bonus_tab.classList.remove('active');
 
         notes_content.classList.remove('hidden');
-        audio_tab.classList.add('hidden');
+        bonus_tab.classList.add('hidden');
+
+        bonus_content.style.display = 'none';
     })
     
     // toggle
-    audio_tab.addEventListener('click', () => {
-        audio_tab.classList.remove('btn-secondary');
-        audio_tab.classList.add('btn-success');
+    bonus_tab.addEventListener('click', () => {
+        bonus_content.style.display = 'flex';
+
+        bonus_tab.classList.remove('btn-secondary');
+        bonus_tab.classList.add('btn-success');
 
         if (notes_tab.classList.contains('btn-success')) {
             notes_tab.classList.remove('btn-success');
             notes_tab.classList.add('btn-secondary');
         }
 
-        audio_content.classList.remove('hidden');
+        bonus_content.classList.remove('hidden');
         notes_content.classList.add('hidden');
 
-        audio_tab.classList.add('active');
+        bonus_tab.classList.add('active');
         notes_tab.classList.remove('active');
 
-        audio_content.classList.remove('hidden');
+        bonus_content.classList.remove('hidden');
         notes_content.classList.add('hidden');
+
+        fetch('https://uselessfacts.jsph.pl/api/v2/facts/random', {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(result => {
+            bonus_content.querySelector('#fact').innerHTML = result["text"];
+        })
     })
 
     document.querySelector('#new_note').onclick = () => {

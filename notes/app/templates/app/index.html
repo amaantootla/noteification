@@ -6,7 +6,7 @@
 <div class="container">
     <div class="tabs">
         <button id="notes-tab" class="tab-button active btn btn-secondary">Notes</button>
-        <button id="audio-tab" class="tab-button btn btn-secondary">🎤</button>
+        <button id="bonus-tab" class="tab-button btn btn-secondary">Fun Fact</button>
     </div>
     <button id="new_note" class="btn btn-primary">+</button>
 
@@ -21,7 +21,8 @@
         {% endfor %}
     </div>
 
-    <div id="audio-content" class="content-area hidden">
+    <div id="bonus-content" class="content-area hidden">
+        <div id="fact"></div>
     </div>
 </div>
 {% endblock %}

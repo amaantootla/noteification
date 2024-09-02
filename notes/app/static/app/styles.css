@@ -76,7 +76,7 @@
     display: none;
 }
 
-.note, .folder {
+.note {
     flex: 1 1 calc(33.333% - 40px);
     max-width: calc(33.333% - 40px);
     background-color: #ffffff;
@@ -89,15 +89,22 @@
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.note:hover, .folder:hover {
+.note:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+@media only screen and (max-width: 768px) {
+    .note {
+        flex: 1 1 100%; 
+        max-width: 100%; 
+    }
+}
+
 .note a {
     /* https://stackoverflow.com/a/8919740 */
-    color: inherit; /* blue colors for links too */
-    text-decoration: inherit; /* no underline */
+    color: inherit; 
+    text-decoration: inherit;
   }
 
 .zen-editor-container {
@@ -130,4 +137,12 @@
     border-radius: 4px;
     cursor: pointer;
     outline: none;
+}
+
+#bonus-content {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    width: 100%;
 }
